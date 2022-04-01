@@ -294,6 +294,7 @@ export const requestPurchase = (
  * @param {ProrationModesAndroid} [prorationModeAndroid] UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY, IMMEDIATE_WITH_TIME_PRORATION, IMMEDIATE_AND_CHARGE_PRORATED_PRICE, IMMEDIATE_WITHOUT_PRORATION, DEFERRED
  * @param {string} [obfuscatedAccountIdAndroid] Specifies an optional obfuscated string that is uniquely associated with the user's account in your app.
  * @param {string} [obfuscatedProfileIdAndroid] Specifies an optional obfuscated string that is uniquely associated with the user's profile in your app.
+ * @param {string} [applicationUsername] Specifies an optional obfuscated string that is uniquely associated with the user's profile in your app.
  * @returns {Promise<SubscriptionPurchase | null>} Promise resolves to null when using proratioModesAndroid=DEFERRED, and to a SubscriptionPurchase otherwise
  */
 export const requestSubscription = (
@@ -303,6 +304,7 @@ export const requestSubscription = (
   prorationModeAndroid: ProrationModesAndroid = -1,
   obfuscatedAccountIdAndroid: string | undefined = undefined,
   obfuscatedProfileIdAndroid: string | undefined = undefined,
+  applicationUsername: string | undefined = undefined,
 ): Promise<SubscriptionPurchase | null> =>
   (
     Platform.select({
@@ -318,6 +320,7 @@ export const requestSubscription = (
         return getIosModule().buyProduct(
           sku,
           andDangerouslyFinishTransactionAutomaticallyIOS,
+          applicationUsername,
         );
       },
       android: async () => {

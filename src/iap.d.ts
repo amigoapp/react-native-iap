@@ -58,9 +58,10 @@ export declare const requestPurchase: (sku: string, andDangerouslyFinishTransact
  * @param {ProrationModesAndroid} [prorationModeAndroid] UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY, IMMEDIATE_WITH_TIME_PRORATION, IMMEDIATE_AND_CHARGE_PRORATED_PRICE, IMMEDIATE_WITHOUT_PRORATION, DEFERRED
  * @param {string} [obfuscatedAccountIdAndroid] Specifies an optional obfuscated string that is uniquely associated with the user's account in your app.
  * @param {string} [obfuscatedProfileIdAndroid] Specifies an optional obfuscated string that is uniquely associated with the user's profile in your app.
+ * @param {string} [applicationUsername] Specifies an optional obfuscated string that is uniquely associated with the user's profile in your app.
  * @returns {Promise<SubscriptionPurchase | null>} Promise resolves to null when using proratioModesAndroid=DEFERRED, and to a SubscriptionPurchase otherwise
  */
-export declare const requestSubscription: (sku: string, andDangerouslyFinishTransactionAutomaticallyIOS?: boolean, purchaseTokenAndroid?: string | undefined, prorationModeAndroid?: ProrationModesAndroid, obfuscatedAccountIdAndroid?: string | undefined, obfuscatedProfileIdAndroid?: string | undefined) => Promise<SubscriptionPurchase | null>;
+export declare const requestSubscription: (sku: string, andDangerouslyFinishTransactionAutomaticallyIOS?: boolean, purchaseTokenAndroid?: string | undefined, prorationModeAndroid?: ProrationModesAndroid, obfuscatedAccountIdAndroid?: string | undefined, obfuscatedProfileIdAndroid?: string | undefined, applicationUsername?: string | undefined) => Promise<SubscriptionPurchase | null>;
 /**
  * Request a purchase for product. This will be received in `PurchaseUpdatedListener`.
  * @param {string} sku The product's sku/ID
