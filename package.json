@@ -1,6 +1,6 @@
 {
   "name": "react-native-iap",
-  "version": "8.0.7",
+  "version": "8.0.8",
   "packageManager": "yarn@3.1.1",
   "description": "React Native In App Purchase Module.",
   "main": "index.js",
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dooboolab/react-native-iap"
+    "url": "https://github.com/amigoapp/react-native-iap"
   },
   "keywords": [
     "react-native",

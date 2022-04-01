@@ -179,6 +179,7 @@ class RNIapIos: RCTEventEmitter, SKRequestDelegate, SKPaymentTransactionObserver
     @objc public func buyProduct(
         _ sku:String,
         andDangerouslyFinishTransactionAutomatically: Bool,
+        applicationUsername: String,
         resolve: @escaping RCTPromiseResolveBlock = { _ in },
         reject: @escaping RCTPromiseRejectBlock = { _, _, _ in }
     ) {
@@ -197,6 +198,7 @@ class RNIapIos: RCTEventEmitter, SKRequestDelegate, SKPaymentTransactionObserver
             addPromise(forKey: prod.productIdentifier, resolve: resolve, reject: reject)
             
             let payment = SKMutablePayment(product: prod)
+            payment.applicationUsername = applicationUsername
             SKPaymentQueue.default().add(payment)
         } else{
             if hasListeners {

@@ -254,6 +254,7 @@ export const requestPurchase = (
   andDangerouslyFinishTransactionAutomaticallyIOS: boolean = false,
   obfuscatedAccountIdAndroid: string | undefined = undefined,
   obfuscatedProfileIdAndroid: string | undefined = undefined,
+  applicationUsername: string | undefined = undefined,
 ): Promise<InAppPurchase> =>
   (
     Platform.select({
@@ -269,6 +270,7 @@ export const requestPurchase = (
         return getIosModule().buyProduct(
           sku,
           andDangerouslyFinishTransactionAutomaticallyIOS,
+          applicationUsername,
         );
       },
       android: async () => {
