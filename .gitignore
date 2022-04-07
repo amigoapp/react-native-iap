@@ -57,8 +57,6 @@ tsconfig.tsbuildinfo
 
 # Generated files
 *.js.flow
-*.d.ts
-*.js
 !IamExample
 !jest.config.js
 !babel.config.js

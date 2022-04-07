@@ -246,6 +246,7 @@ export const requestPurchase = (
   andDangerouslyFinishTransactionAutomaticallyIOS: boolean = false,
   obfuscatedAccountIdAndroid: string | undefined = undefined,
   obfuscatedProfileIdAndroid: string | undefined = undefined,
+  applicationUsername: string | undefined = undefined,
 ): Promise<InAppPurchase> =>
   (
     Platform.select({
@@ -261,6 +262,7 @@ export const requestPurchase = (
         return getIosModule().buyProduct(
           sku,
           andDangerouslyFinishTransactionAutomaticallyIOS,
+          applicationUsername,
         );
       },
       android: async () => {
@@ -293,6 +295,7 @@ export const requestSubscription = (
   prorationModeAndroid: ProrationModesAndroid = -1,
   obfuscatedAccountIdAndroid: string | undefined = undefined,
   obfuscatedProfileIdAndroid: string | undefined = undefined,
+  applicationUsername: string | undefined = undefined,
 ): Promise<SubscriptionPurchase | null> =>
   (
     Platform.select({
@@ -308,6 +311,7 @@ export const requestSubscription = (
         return getIosModule().buyProduct(
           sku,
           andDangerouslyFinishTransactionAutomaticallyIOS,
+          applicationUsername
         );
       },
       android: async () => {
@@ -386,8 +390,8 @@ export const finishTransaction = (
 /**
  * Clear Transaction (iOS only)
  *   Finish remaining transactions. Related to issue #257 and #801
- *     link : https://github.com/dooboolab/react-native-iap/issues/257
- *            https://github.com/dooboolab/react-native-iap/issues/801
+ *     link : https://github.com/amigoapp/react-native-iap/issues/257
+ *            https://github.com/amigoapp/react-native-iap/issues/801
  * @returns {Promise<void>}
  */
 export const clearTransactionIOS = (): Promise<void> =>
