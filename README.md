@@ -4,7 +4,7 @@
 [![Next](https://img.shields.io/npm/v/react-native-iap/next.svg?style=flat-square)](https://npmjs.org/package/react-native-iap)
 [![Download](http://img.shields.io/npm/dm/react-native-iap.svg?style=flat-square)](https://npmjs.org/package/react-native-iap)
 [![Build Status](https://travis-ci.com/dooboolab/react-native-iap.svg?branch=master)](https://travis-ci.com/dooboolab/react-native-iap)
-[![CI](https://github.com/dooboolab/react-native-iap/actions/workflows/ci.yml/badge.svg)](https://github.com/dooboolab/react-native-iap/actions/workflows/ci.yml)
+[![CI](https://github.com/dooboolab/react-native-iap/actions/workflows/test.yml/badge.svg)](https://github.com/dooboolab/react-native-iap/actions/workflows/test.yml)
 [![document](https://github.com/dooboolab/react-native-iap/actions/workflows/deploy-document.yml/badge.svg)](https://github.com/dooboolab/react-native-iap/actions/workflows/deploy-document.yml)
 [![License](https://img.shields.io/npm/l/react-native-iap.svg)](https://npmjs.org/package/react-native-iap)
 [![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/dooboolab/react-native-iap.svg)](https://github.com/dooboolab/react-native-iap)
@@ -180,3 +180,9 @@ Thank you to all the people who helped to maintain and upgrade this project!
 <hr>
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdooboolab%2Freact-native-iap.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdooboolab%2Freact-native-iap?ref=badge_large)
+
+## Quality gates
+
+`test.yml`, `test-android.yml` and `test-android-example.yml` publish test summaries in Actions and the PR. Preserves JavaScript lint, TypeScript, Flow, Jest and monolinter, Android library/example builds and both Java 11 matrix entries. Gradle XML reports are combined without counting nested suites twice. There are currently no Android test source files: if Gradle produces no JUnit, the summary explicitly reports the missing file instead of inventing test counts. Each matrix entry has its own comment. JUnit uses immutable ga-modules commit `40a1727bc62d2204952292e6054eeff898ecc0cb` (amigoapp/ga-modules#197). All jobs have a 15-minute timeout.
+
+The Yarn 3.1.1 jobs explicitly use Node 22 because Yarn relies on `util.isDate`, removed in Node 23.

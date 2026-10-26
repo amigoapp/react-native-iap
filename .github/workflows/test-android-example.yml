@@ -1,0 +1,63 @@
+name: CI - Android Example Tests
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "IapExample/**"
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_android_example:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [ 11.0.3, 11 ]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup kernel for react native, increase watchers
+      run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: ${{ matrix.java-version }}
+    # Yarn 3.1.1 uses util.isDate, removed in Node 23.
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install base modules
+      run: yarn && yarn build
+    - name: Install modules
+      working-directory: IapExample
+      run: yarn
+    - name: Grant execute permission for gradlew in example app
+      run: chmod +x IapExample/android/gradlew
+    - name: Build and test Android example
+      id: tests
+      working-directory: IapExample/android
+      run: ./gradlew build test
+
+    - name: Collect test reports
+      if: always()
+      run: python3 .github/merge-junit.py IapExample/android android-example-results-${{ matrix.java-version }}.xml
+
+    - name: Summarize tests
+      if: always()
+      uses: amigoapp/ga-modules/test-summary@40a1727bc62d2204952292e6054eeff898ecc0cb
+      with:
+        title: Android Example Tests (Java ${{ matrix.java-version }})
+        results-file: android-example-results-${{ matrix.java-version }}.xml
+        coverage-file: ''
+        test-result: ${{ steps.tests.outcome }}
+        comment-id: android-example-${{ matrix.java-version }}
