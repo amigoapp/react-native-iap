@@ -1,0 +1,49 @@
+name: CI - Android Tests
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "android/**"
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [ 11.0.3, 11 ]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: ${{ matrix.java-version }}
+    - name: Grant execute permission for gradlew
+      run: chmod +x android/gradlew
+    - name: Build and test Android library
+      id: tests
+      working-directory: android
+      run: ./gradlew build test verGJF
+
+    - name: Collect test reports
+      if: always()
+      run: python3 .github/merge-junit.py android android-results-${{ matrix.java-version }}.xml
+
+    - name: Summarize tests
+      if: always()
+      uses: amigoapp/ga-modules/test-summary@40a1727bc62d2204952292e6054eeff898ecc0cb
+      with:
+        title: Android Tests (Java ${{ matrix.java-version }})
+        results-file: android-results-${{ matrix.java-version }}.xml
+        coverage-file: ''
+        test-result: ${{ steps.tests.outcome }}
+        comment-id: android-${{ matrix.java-version }}

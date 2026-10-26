@@ -1,0 +1,56 @@
+name: CI - Unit Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Yarn 3.1.1 uses util.isDate, removed in Node 23.
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install modules
+      run: yarn
+
+    - name: Build typescript & flow
+      run: yarn build
+
+    - name: Run lint
+      run: yarn lint
+
+    - name: Check types
+      run: yarn test:typescript
+
+    - name: Check Flow types
+      run: yarn test:flow
+
+    - name: Run unit tests
+      id: tests
+      run: yarn test --json --outputFile=jest-results.json
+
+    - name: Check monorepo consistency
+      run: yarn monolinter --no-verify
+
+    - name: Summarize tests
+      if: always()
+      uses: amigoapp/ga-modules/test-summary@v3
+      with:
+        results-file: jest-results.json
+        coverage-file: ''
+        test-result: ${{ steps.tests.outcome }}
+        comment-id: unit-tests
